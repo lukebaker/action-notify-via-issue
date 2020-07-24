@@ -175,7 +175,7 @@ async function run() {
 
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
-    /*
+
     const newIssue = await octokit.issues.create({
       owner,
       repo,
@@ -184,12 +184,12 @@ async function run() {
       body: `Here's the body. @${user}`,
     });
     core.info(newIssue.data);
-    */
+    core.info(newIssue);
 
     await octokit.issues.update({
       owner,
       repo,
-      issue_number: 3,
+      issue_number: newIssue.data.id,
       state: "closed",
     });
   } catch (error) {
