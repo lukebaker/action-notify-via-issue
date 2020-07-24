@@ -183,8 +183,8 @@ async function run() {
       title: `New issue for ${user}!`,
       body: `Here's the body. @${user}`,
     });
-    core.info(newIssue.data);
-    core.info(newIssue);
+    core.info(JSON.stringify(newIssue.data));
+    core.info(JSON.stringify(newIssue));
 
     await octokit.issues.update({
       owner,
