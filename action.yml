@@ -1,5 +1,5 @@
-name: "Wait"
-description: "Wait a designated number of milliseconds"
+name: "Notify via issue"
+description: "Notifies GitHub Action actor via an issue"
 inputs:
   token:
     description: "The GitHub authentication token"
@@ -7,6 +7,9 @@ inputs:
   repository:
     description: "The full name of the target repository."
     default: ${{ github.repository }}
+  user:
+    description: "The GitHub username to notify."
+    default: ${{ github.actor }}
 outputs:
   time: # output will be available to future steps
     description: "The message to output"
