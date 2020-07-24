@@ -1,10 +1,12 @@
 name: "Wait"
 description: "Wait a designated number of milliseconds"
 inputs:
-  milliseconds: # id of input
-    description: "number of milliseconds to wait"
-    required: true
-    default: "1000"
+  token:
+    description: "The GitHub authentication token"
+    default: ${{ github.token }}
+  repository:
+    description: "The full name of the target repository."
+    default: ${{ github.repository }}
 outputs:
   time: # output will be available to future steps
     description: "The message to output"
