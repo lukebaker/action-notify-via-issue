@@ -4,8 +4,8 @@
   "description": "JavaScript Action Template",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --write *.js",
-    "format-check": "prettier --check *.js",
+    "format": "prettier --write .",
+    "format-check": "prettier --check .",
     "lint": "eslint .",
     "prepare": "ncc build index.js -o dist --source-map",
     "test": "jest",
