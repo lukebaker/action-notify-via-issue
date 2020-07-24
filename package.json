@@ -4,10 +4,12 @@
   "description": "JavaScript Action Template",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write *.js",
+    "format-check": "prettier --check *.js",
     "lint": "eslint .",
     "prepare": "ncc build index.js -o dist --source-map",
     "test": "jest",
-    "all": "npm run lint && npm run prepare && npm run test"
+    "all": "yarn run lint && yarn format-check && yarn run prepare && yarn run test"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@zeit/ncc": "^0.22.3",
     "eslint": "^7.4.0",
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "prettier": "^2.0.5"
   }
 }
