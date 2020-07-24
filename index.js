@@ -17,6 +17,8 @@ async function run() {
       title: `New issue for ${user}!`,
       body: `Here's the body. @${user}`,
     });
+
+    core.info(newIssue.data);
     await octokit.issues.update({
       owner,
       repo,
@@ -24,6 +26,7 @@ async function run() {
       state: "closed",
     });
   } catch (error) {
+    core.error(error);
     core.setFailed(error.message);
   }
 }
