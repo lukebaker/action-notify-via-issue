@@ -13,6 +13,22 @@ inputs:
   title:
     description: "Title of the issue. Used to find appropriate issue to add comment."
     default: "${{ github.workflow }} notifications for ${{ github.actor }}"
+  intro_body:
+    description: "Body for introduction to issue."
+    default: |
+      Hi there!
+
+      This closed issue is a placeholder for notifications for @${user}. If
+      you're not **${user}**, you may unsubscribe from notifications for this
+      issue via the link at the bottom of this email or the unsubscribe
+      button on the issue page in GitHub.
+
+      ---
+
+  comment_body:
+    description: "Body for comment notifications."
+    default: |
+      The build failed.
 outputs:
   time: # output will be available to future steps
     description: "The message to output"

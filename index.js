@@ -1,6 +1,7 @@
 const queries = require("./queries");
 const github = require("@actions/github");
 const core = require("@actions/core");
+const template = require("lodash/template");
 
 async function findExistingIssue(octokit, { owner, repo, user, title }) {
   let issue = null;
@@ -29,9 +30,13 @@ async function run() {
     const repository = core.getInput("repository");
     const user = core.getInput("user");
     const title = core.getInput("title");
+    const intro_body = core.getInput("intro_body");
+    const comment_body = core.getInput("comment_body");
 
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
+
+    const templateContext = { user, context: github.context, title };
 
     let issue = await findExistingIssue(octokit, {
       owner,
@@ -43,17 +48,20 @@ async function run() {
       let { createIssue } = await octokit.graphql(queries.createIssue, {
         repositoryId: github.context.payload.repository.node_id,
         title,
-        body: `el cuerpo @${user}`,
+        body:
+          template(intro_body)(templateContext) +
+          template(comment_body)(templateContext),
       });
       issue = createIssue.issue;
       core.info(`Created issue: ${issue.url}`);
       await octokit.graphql(queries.closeIssue, { id: issue.id });
+    } else {
+      let { addComment } = await octokit.graphql(queries.addComment, {
+        subjectId: issue.id,
+        body: template(comment_body)(templateContext),
+      });
+      core.info(`Added comment: ${addComment.commentEdge.node.url}`);
     }
-    let { addComment } = await octokit.graphql(queries.addComment, {
-      subjectId: issue.id,
-      body: "This is a test comment. :mexico:",
-    });
-    core.info(`Added comment: ${addComment.commentEdge.node.url}`);
   } catch (error) {
     core.setFailed(error);
   }
