@@ -33,13 +33,6 @@ async function run() {
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
 
-    core.info(JSON.stringify(github.context));
-
-    let ids = await octokit.graphql(queries.fetchIds, {
-      owner,
-      repo,
-      login: user,
-    });
     let issue = await findExistingIssue(octokit, {
       owner,
       repo,
@@ -48,7 +41,7 @@ async function run() {
     });
     if (!issue) {
       let { createIssue } = await octokit.graphql(queries.createIssue, {
-        repositoryId: ids.repository.id,
+        repositoryId: github.context.payload.repository.node_id,
         title,
         body: `el cuerpo @${user}`,
       });

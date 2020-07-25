@@ -1,14 +1,4 @@
 const queries = {
-  fetchIds: `query fetchIds($owner: String!, $repo: String!, $login: String!) {
-  user(login: $login) {
-    id
-  }
-  repository(owner: $owner, name: $repo) {
-    id
-  }
-}
-`,
-
   findIssues: `query findIssues($owner: String!, $repo: String!, $mentioned: String!, $after: String = null) {
   repository(owner: $owner, name: $repo) {
     id
