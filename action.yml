@@ -18,7 +18,7 @@ inputs:
     default: |
       Hi there!
 
-      This closed issue is a placeholder for notifications for @${user}. If you're not **${user}**, you may unsubscribe from notifications for this issue via the link at the bottom of this email or the unsubscribe button on the issue page in GitHub.
+      This closed issue is a placeholder for notifications for @${user}. If you're not **${user}**, you may unsubscribe from notifications for this issue via the unsubscribe button on this issue page in GitHub.
   comment_body:
     description: "Body for comment notifications."
     default: |
