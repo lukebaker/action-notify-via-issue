@@ -265,6 +265,8 @@ async function run() {
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
 
+    core.info(JSON.stringify(github.context));
+
     let ids = await octokit.graphql(queries.fetchIds, {
       owner,
       repo,
