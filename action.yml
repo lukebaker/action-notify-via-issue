@@ -12,7 +12,7 @@ inputs:
     default: ${{ github.actor }}
   title:
     description: "Title of the issue. Used to find appropriate issue to add comment."
-    default: "${{ github.workflow }} notifications for ${{ github.actor }}"
+    default: "${{ github.workflow }} notifications 4 ${{ github.actor }}"
 outputs:
   time: # output will be available to future steps
     description: "The message to output"

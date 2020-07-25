@@ -1,8 +1,19 @@
 const github = require("@actions/github");
 const core = require("@actions/core");
 
+const fetchIds = `query fetchIds($owner: String!, $repo: String!, $login: String!) {
+  user(login: $login) {
+    id
+  }
+  repository(owner: $owner, name: $repo) {
+    id
+  }
+}
+`;
+
 const findIssues = `query findIssues($owner: String!, $repo: String!, $mentioned: String!, $after: String = null) {
   repository(owner: $owner, name: $repo) {
+    id
     issues(after: $after, first: 10, filterBy: {mentioned: $mentioned, createdBy: "github-actions[bot]"}, orderBy: {field: CREATED_AT, direction: DESC}) {
       nodes {
         id
@@ -17,11 +28,28 @@ const findIssues = `query findIssues($owner: String!, $repo: String!, $mentioned
 }
 `;
 
+const createIssue = `mutation createIssue($repositoryId: ID!, $title: String!, $body: String = null, $assigneeIds: [ID!] = null) {
+  createIssue(input: {repositoryId: $repositoryId, title: $title, body: $body, assigneeIds: $assigneeIds}) {
+    issue {
+      id
+    }
+  }
+}
+`;
+
 const addComment = `mutation addCommentToIssue($subjectId: ID!, $body: String!) {
   addComment(input: {subjectId: $subjectId, body: $body}) {
     clientMutationId
   }
-}`;
+}
+`;
+
+const closeIssue = `mutation closeIssue($id: ID!) {
+  updateIssue(input: {id: $id, state:CLOSED}) {
+    clientMutationId
+  }
+}
+`;
 
 async function findExistingIssue(octokit, { owner, repo, user, title }) {
   let issue = null;
@@ -54,33 +82,26 @@ async function run() {
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
 
-    const existingIssue = await findExistingIssue(octokit, {
+    let ids = await octokit.graphql(fetchIds, { owner, repo, login: user });
+    let issue = await findExistingIssue(octokit, {
       owner,
       repo,
       user,
       title,
     });
-    if (existingIssue) {
-      await octokit.graphql(addComment, {
-        subjectId: existingIssue.id,
-        body: "This is a test comment.",
-      });
-    } else {
-      const newIssue = await octokit.issues.create({
-        owner,
-        repo,
-        assignee: user,
+    if (!issue) {
+      issue = await octokit.graphql(createIssue, {
+        repositoryId: ids.repository.id,
         title,
-        body: `Here's the body. @${user}`,
+        assigneeIds: [ids.user.id],
+        body: "el cuerpo",
       });
-
-      await octokit.issues.update({
-        owner,
-        repo,
-        issue_number: newIssue.data.number,
-        state: "closed",
-      });
+      await octokit.graphql(closeIssue, { id: issue.id });
     }
+    await octokit.graphql(addComment, {
+      subjectId: issue.id,
+      body: "Oh hi. This is a test comment.",
+    });
   } catch (error) {
     core.setFailed(error);
   }
