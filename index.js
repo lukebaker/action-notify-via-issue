@@ -18,6 +18,7 @@ const findIssues = `query findIssues($owner: String!, $repo: String!, $mentioned
       nodes {
         id
         title
+        url
       }
       pageInfo {
         hasNextPage
@@ -32,6 +33,8 @@ const createIssue = `mutation createIssue($repositoryId: ID!, $title: String!, $
   createIssue(input: {repositoryId: $repositoryId, title: $title, body: $body, assigneeIds: $assigneeIds}) {
     issue {
       id
+      title
+      url
     }
   }
 }
@@ -39,7 +42,11 @@ const createIssue = `mutation createIssue($repositoryId: ID!, $title: String!, $
 
 const addComment = `mutation addCommentToIssue($subjectId: ID!, $body: String!) {
   addComment(input: {subjectId: $subjectId, body: $body}) {
-    clientMutationId
+    commentEdge {
+      node {
+        url
+      }
+    }
   }
 }
 `;
@@ -89,7 +96,6 @@ async function run() {
       user,
       title,
     });
-    core.info(JSON.stringify(issue));
     if (!issue) {
       let createResp = await octokit.graphql(createIssue, {
         repositoryId: ids.repository.id,
@@ -98,13 +104,16 @@ async function run() {
         body: "el cuerpo",
       });
       issue = createResp.createIssue.issue;
-      core.info(JSON.stringify(issue));
+      core.info(`Created issue: ${issue.url}`);
       await octokit.graphql(closeIssue, { id: issue.id });
     }
-    await octokit.graphql(addComment, {
+    let addCommentResp = await octokit.graphql(addComment, {
       subjectId: issue.id,
       body: "Oh hi. This is a test comment.",
     });
+    core.info(
+      `Added comment: ${addCommentResp.addComment.commentEdge.node.url}`
+    );
   } catch (error) {
     core.setFailed(error);
   }
