@@ -170,8 +170,8 @@ const findIssues = `query findIssues($owner: String!, $repo: String!, $mentioned
   repository(owner: $owner, name: $repo) {
     issues(after: $after, first: 10, filterBy: {mentioned: $mentioned, createdBy: "github-actions[bot]"}, orderBy: {field: CREATED_AT, direction: DESC}) {
       nodes {
+        id
         title
-        number
       }
       pageInfo {
         hasNextPage
@@ -181,6 +181,12 @@ const findIssues = `query findIssues($owner: String!, $repo: String!, $mentioned
   }
 }
 `;
+
+const addComment = `mutation addCommentToIssue($subjectId: ID!, $body: String!) {
+  addComment(input: {subjectId: $subjectId, body: $body}) {
+    clientMutationId
+  }
+}`;
 
 async function findExistingIssue(octokit, { owner, repo, user, title }) {
   let issue = null;
@@ -220,7 +226,10 @@ async function run() {
       title,
     });
     if (existingIssue) {
-      core.info(JSON.stringify(existingIssue));
+      await octokit.graphql(addComment, {
+        subjectId: existingIssue.id,
+        body: "This is a test comment.",
+      });
     } else {
       const newIssue = await octokit.issues.create({
         owner,
