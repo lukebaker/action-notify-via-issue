@@ -12,7 +12,7 @@ inputs:
     default: ${{ github.actor }}
   title:
     description: "Title of the issue. Used to find appropriate issue to add comment."
-    default: "${{ github.workflow }} notifications for ${{ github.actor }}"
+    default: "${{ github.workflow }} notifications for ${user}"
   intro_body:
     description: "Body for introduction to issue."
     default: |

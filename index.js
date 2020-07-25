@@ -29,14 +29,15 @@ async function run() {
     const token = core.getInput("token");
     const repository = core.getInput("repository");
     const user = core.getInput("user");
-    const title = core.getInput("title");
     const intro_body = core.getInput("intro_body");
     const comment_body = core.getInput("comment_body");
 
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
 
-    const templateContext = { user, context: github.context, title };
+    let templateContext = { user, context: github.context };
+    const title = template(core.getInput("input"))(templateContext);
+    templateContext = { ...templateContext, title };
 
     let issue = await findExistingIssue(octokit, {
       owner,
