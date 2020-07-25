@@ -280,8 +280,7 @@ async function run() {
       let { createIssue } = await octokit.graphql(queries.createIssue, {
         repositoryId: ids.repository.id,
         title,
-        assigneeIds: [ids.user.id],
-        body: "el cuerpo",
+        body: `el cuerpo @${user}`,
       });
       issue = createIssue.issue;
       core.info(`Created issue: ${issue.url}`);
