@@ -254,13 +254,16 @@ async function run() {
       user,
       title,
     });
+    core.info(JSON.stringify(issue));
     if (!issue) {
-      issue = await octokit.graphql(createIssue, {
+      let createResp = await octokit.graphql(createIssue, {
         repositoryId: ids.repository.id,
         title,
         assigneeIds: [ids.user.id],
         body: "el cuerpo",
       });
+      issue = createResp.createIssue.issue;
+      core.info(JSON.stringify(issue));
       await octokit.graphql(closeIssue, { id: issue.id });
     }
     await octokit.graphql(addComment, {
