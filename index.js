@@ -1,6 +1,22 @@
 const github = require("@actions/github");
 const core = require("@actions/core");
 
+const findIssues = `query findIssues($owner: String!, $repo: String!, $mentioned: String!, $after: String = null) {
+  repository(owner: $owner, name: $repo) {
+    issues(after: $after, first: 10, filterBy: {mentioned: $mentioned, createdBy: "github-actions[bot]"}, orderBy: {field: CREATED_AT, direction: DESC}) {
+      nodes {
+        title
+        number
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+`;
+
 // most @actions toolkit packages have async methods
 async function run() {
   try {
@@ -10,7 +26,14 @@ async function run() {
 
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
+    let issues = await octokit.graphql(findIssues, {
+      owner,
+      repo,
+      mentioned: user,
+    });
+    core.info(JSON.stringify(issues));
 
+    /*
     const newIssue = await octokit.issues.create({
       owner,
       repo,
@@ -25,6 +48,7 @@ async function run() {
       issue_number: newIssue.data.number,
       state: "closed",
     });
+    */
   } catch (error) {
     core.setFailed(error);
   }
