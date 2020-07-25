@@ -50,6 +50,7 @@ async function run() {
         title,
         body:
           template(intro_body)(templateContext) +
+          "\n---\n" +
           template(comment_body)(templateContext),
       });
       issue = createIssue.issue;
