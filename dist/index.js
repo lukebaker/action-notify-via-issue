@@ -277,23 +277,21 @@ async function run() {
       title,
     });
     if (!issue) {
-      let createResp = await octokit.graphql(queries.createIssue, {
+      let { createIssue } = await octokit.graphql(queries.createIssue, {
         repositoryId: ids.repository.id,
         title,
         assigneeIds: [ids.user.id],
         body: "el cuerpo",
       });
-      issue = createResp.createIssue.issue;
+      issue = createIssue.issue;
       core.info(`Created issue: ${issue.url}`);
       await octokit.graphql(queries.closeIssue, { id: issue.id });
     }
-    let addCommentResp = await octokit.graphql(queries.addComment, {
+    let { addComment } = await octokit.graphql(queries.addComment, {
       subjectId: issue.id,
-      body: "This is a test comment. :sparkles:",
+      body: "This is a test comment. :mexico:",
     });
-    core.info(
-      `Added comment: ${addCommentResp.addComment.commentEdge.node.url}`
-    );
+    core.info(`Added comment: ${addComment.commentEdge.node.url}`);
   } catch (error) {
     core.setFailed(error);
   }
