@@ -36,7 +36,7 @@ async function run() {
     const [owner, repo] = repository.split("/");
 
     let templateContext = { user, context: github.context };
-    const title = template(core.getInput("input"))(templateContext);
+    const title = template(core.getInput("title"))(templateContext);
     templateContext = { ...templateContext, title };
 
     let issue = await findExistingIssue(octokit, {
