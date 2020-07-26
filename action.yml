@@ -22,7 +22,11 @@ inputs:
   comment_body:
     description: "Body for comment notifications."
     default: |
-      ${job.status === "success" && "## :heavy_check_mark: ${github.workflow} / ${github.job} succeeded in ${github.ref}.replace(/^refs\/[^\/]+\//, '')"}
+      <% if (job.status === "success") { %>
+      ## :heavy_check_mark: <%= github.workflow %> / <%= github.job %> succeeded in <%= github.ref.split('/').slice(2).join('/') %>
+      <% } else if (job.status === "failure") { %>
+      ## :x: <%= github.workflow %> / <%= github.job %> failed in <%= github.ref.split('/').slice(2).join('/') %>
+      <% } %>
       - Workflow: [${github.workflow} results](${github.payload.repository.url}/actions/runs/${github.runId})
       - Commit: [`${github.payload.head_commit.id.slice(0,7)}`](${github.payload.head_commit.url}) - [${github.payload.head_commit.author.username}](https://github.com/${github.payload.head_commit.author.username})
       ${github.payload.head_commit.message.replace(/^/gm, "    > ")}
