@@ -24,6 +24,4 @@ jobs:
       #  run: exit 1
       - name: self
         uses: ./
-        with:
-          skip_when: ${job.status === "success"}
         if: always()
