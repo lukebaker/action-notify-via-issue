@@ -1,5 +1,10 @@
 # Create a JavaScript Action
 
+# Todo
+
+- [ ] Include duration of job like [action-slack](https://github.com/8398a7/action-slack/blob/932385ec78c1a25cdbbdc3c2a9fc4d91f8534aed/src/fields.ts#L94-L100)
+- [ ] Include link to specific job that failed, using same API call above to get job id
+
 <p align="center">
   <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
 </p>
