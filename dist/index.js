@@ -504,6 +504,10 @@ async function run() {
     core.debug(JSON.stringify(templateContext));
     const title = template(core.getInput("title"))(templateContext);
     templateContext = { ...templateContext, title };
+    const skip_when = template(core.getInput("skip_when"))(templateContext);
+    if (skip_when === "true") {
+      return;
+    }
 
     let issue = await findExistingIssue(octokit, {
       owner,

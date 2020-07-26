@@ -31,6 +31,9 @@ inputs:
       - Commit: [`${github.payload.head_commit.id.slice(0,7)}`](${github.payload.head_commit.url}) - [${github.payload.head_commit.author.username}](https://github.com/${github.payload.head_commit.author.username})
       ${github.payload.head_commit.message.replace(/^/gm, "    > ")}
       - Repository: [${github.payload.repository.full_name}](${github.payload.repository.url})
+  skip_when:
+    description: "lodash template that returns 'true' or 'false' to skip notification"
+    default: "false"
   job:
     default: ${{ toJson(job) }}
   runner:
