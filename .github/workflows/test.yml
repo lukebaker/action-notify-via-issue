@@ -23,4 +23,3 @@ jobs:
       - name: Fail
         run: exit 1
       - uses: ./
-        if: ${{ always() }}
