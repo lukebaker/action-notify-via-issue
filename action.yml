@@ -44,4 +44,5 @@ outputs:
     description: "The message to output"
 runs:
   using: "node12"
-  main: "dist/index.js"
+  main: "dist/success.js"
+  post: "dist/index.js"

@@ -501,7 +501,7 @@ async function run() {
       strategy,
       matrix,
     };
-    core.info(JSON.stringify(templateContext));
+    core.debug(JSON.stringify(templateContext));
     const title = template(core.getInput("title"))(templateContext);
     templateContext = { ...templateContext, title };
 
