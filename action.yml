@@ -23,8 +23,6 @@ inputs:
     description: "Body for comment notifications."
     default: |
       The build failed.
-  steps:
-    default: ${{ toJson(steps) }}
   job:
     default: ${{ toJson(job) }}
   runner:
@@ -33,8 +31,6 @@ inputs:
     default: ${{ toJson(strategy) }}
   matrix:
     default: ${{ toJson(matrix) }}
-  needs:
-    default: ${{ toJson(needs) }}
 outputs:
   time: # output will be available to future steps
     description: "The message to output"

@@ -32,11 +32,9 @@ async function run() {
     const intro_body = core.getInput("intro_body");
     const comment_body = core.getInput("comment_body");
     const job = JSON.parse(core.getInput("job"));
-    const steps = JSON.parse(core.getInput("steps"));
     const runner = JSON.parse(core.getInput("runner"));
     const strategy = JSON.parse(core.getInput("strategy"));
     const matrix = JSON.parse(core.getInput("matrix"));
-    const needs = JSON.parse(core.getInput("needs"));
 
     const payload = github.context.payload;
     const octokit = github.getOctokit(token);
@@ -46,11 +44,9 @@ async function run() {
       user,
       github: github.context,
       job,
-      steps,
       runner,
       strategy,
       matrix,
-      needs,
     };
     core.info(JSON.stringify(templateContext));
     const title = template(core.getInput("title"))(templateContext);
