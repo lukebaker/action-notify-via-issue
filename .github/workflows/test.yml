@@ -25,5 +25,5 @@ jobs:
       - name: self
         uses: ./
         with:
-          skip_when: "${job.status === "success"}"
+          skip_when: ${job.status === "success"}
         if: always()
