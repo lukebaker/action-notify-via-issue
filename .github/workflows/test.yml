@@ -20,8 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      #- name: Fail
-      #  run: exit 1
-      - name: self
-        uses: ./
+      - name: Fail
+        run: exit 1
+      - uses: ./
+        with:
+          skip_when: ${job.status === "success"}
         if: always()
