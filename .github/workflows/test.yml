@@ -22,7 +22,8 @@ jobs:
       - uses: actions/checkout@v2
       #- name: Fail
       #  run: exit 1
-      - uses: lukebaker/action-notify-via-issue@main
+      - name: self
+        uses: ./
         with:
           skip_when: "${job.status === "success"}"
         if: always()
