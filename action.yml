@@ -22,9 +22,9 @@ inputs:
   comment_body:
     description: "Body for comment notifications."
     default: |
-      ${job.status === "success" && "## :heavy_check_mark: Job succeeded"}
-      - Workflow: [${github.workflow}](${github.payload.repository.url}/actions/runs/${github.runId})
-      - Commit: [${github.payload.head_commit.author.username}](https://github.com/${github.payload.head_commit.author.username}) - [${github.payload.head_commit.id.slice(0,7)}](${github.payload.head_commit.url})
+      ${job.status === "success" && "## :heavy_check_mark: ${github.workflow} / ${github.job} succeeded in `${github.ref}.repace(/^refs\/[^\/]+\//, '')`"}
+      - Workflow: [${github.workflow} results](${github.payload.repository.url}/actions/runs/${github.runId})
+      - Commit: [`${github.payload.head_commit.id.slice(0,7)}`](${github.payload.head_commit.url}) - [${github.payload.head_commit.author.username}](https://github.com/${github.payload.head_commit.author.username})
       ${github.payload.head_commit.message.replace(/^/gm, "    > ")}
       - Repository: [${github.payload.repository.full_name}](${github.payload.repository.url})
   job:
