@@ -22,7 +22,11 @@ inputs:
   comment_body:
     description: "Body for comment notifications."
     default: |
-      The build failed.
+      ${job.status === "success" && "## :heavy_check_mark: Job succeeded"}
+      - Workflow: [${github.workflow}](${github.payload.repository.url}/actoins/runs/${github.runId})
+      - Commit: [${github.payload.head_commit.author.username}](https://github.com/${github.payload.head_commit.author.username}) - [${github.payload.head_commit.id.slice(0,7)}](${github.payload.head_commit.url})
+          > ${github.payload.head_commit.message}
+      - Repository: [${github.payload.repository.full_name}](${github.payload.repository.url})
   job:
     default: ${{ toJson(job) }}
   runner:
