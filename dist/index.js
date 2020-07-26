@@ -484,11 +484,28 @@ async function run() {
     const user = core.getInput("user");
     const intro_body = core.getInput("intro_body");
     const comment_body = core.getInput("comment_body");
+    const job = JSON.parse(core.getInput("job"));
+    const steps = JSON.parse(core.getInput("steps"));
+    const runner = JSON.parse(core.getInput("runner"));
+    const strategy = JSON.parse(core.getInput("strategy"));
+    const matrix = JSON.parse(core.getInput("matrix"));
+    const needs = JSON.parse(core.getInput("needs"));
 
+    const payload = github.context.payload;
     const octokit = github.getOctokit(token);
     const [owner, repo] = repository.split("/");
 
-    let templateContext = { user, context: github.context };
+    let templateContext = {
+      user,
+      github: github.context,
+      job,
+      steps,
+      runner,
+      strategy,
+      matrix,
+      needs,
+    };
+    core.info(JSON.stringify(templateContext));
     const title = template(core.getInput("title"))(templateContext);
     templateContext = { ...templateContext, title };
 
@@ -500,7 +517,7 @@ async function run() {
     });
     if (!issue) {
       let { createIssue } = await octokit.graphql(queries.createIssue, {
-        repositoryId: github.context.payload.repository.node_id,
+        repositoryId: payload.repository.node_id,
         title,
         body:
           template(intro_body)(templateContext) +
