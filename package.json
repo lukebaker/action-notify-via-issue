@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lukebaker/action-notify-via-issue.git"
+    "url": "git+https://github.com/agathongroup/action-notify-via-issue.git"
   },
   "keywords": [
     "GitHub",
@@ -23,9 +23,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lukebaker/action-notify-via-issue/issues"
+    "url": "https://github.com/agathongroup/action-notify-via-issue/issues"
   },
-  "homepage": "https://github.com/lukebaker/action-notify-via-issue#readme",
+  "homepage": "https://github.com/agathongroup/action-notify-via-issue#readme",
   "dependencies": {
     "@actions/core": "^1.1.1",
     "@actions/github": "^4.0.0",

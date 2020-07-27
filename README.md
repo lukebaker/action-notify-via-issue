@@ -1,7 +1,7 @@
 # Notify via issue comment
 
 <p align="center">
-  <a href="https://github.com/lukebaker/action-notify-via-issue/actions"><img alt="javscript-action status" src="https://github.com/lukebaker/action-notify-via-issue/workflows/units-test/badge.svg"></a>
+  <a href="https://github.com/agathongroup/action-notify-via-issue/actions"><img alt="javscript-action status" src="https://github.com/agathongroup/action-notify-via-issue/workflows/units-test/badge.svg"></a>
 </p>
 
 This GitHub Action will trigger notifications by creating or commenting on an
@@ -13,7 +13,7 @@ user, this action will create a new comment on the existing issue.
 ## Basic usage
 
 ```yaml
-- uses: lukebaker/action-notify-via-issue@v1
+- uses: agathongroup/action-notify-via-issue@v1
   if: ${{ failure() }}
 ```
 
@@ -24,10 +24,10 @@ run.
 ## Usage
 
 ```yaml
-- uses: lukebaker/action-notify-via-issue@v1
+- uses: agathongroup/action-notify-via-issue@v1
   if: ${{ always() }}
   with:
-    # Repository name with owner. For example, lukebaker/action-notify-via-issue
+    # Repository name with owner. For example, agathongroup/action-notify-via-issue
     # Lodash template: no
     # Default: ${{ github.repository }}
     repository: ""
