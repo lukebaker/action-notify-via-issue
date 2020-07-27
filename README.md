@@ -1,119 +1,103 @@
-# Create a JavaScript Action
-
-# Todo
-
-- [ ] Include duration of job like [action-slack](https://github.com/8398a7/action-slack/blob/932385ec78c1a25cdbbdc3c2a9fc4d91f8534aed/src/fields.ts#L94-L100)
-- [ ] Include link to specific job that failed, using same API call above to get job id
+# Notify via issue comment
 
 <p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
+  <a href="https://github.com/lukebaker/action-notify-via-issue/actions"><img alt="javscript-action status" src="https://github.com/lukebaker/action-notify-via-issue/workflows/units-test/badge.svg"></a>
 </p>
 
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
+This GitHub Action will trigger notifications by creating or commenting on an
+issue. By default, the action will create a new issue the first time it needs
+to notify a particular user. It will immediately close this issue so that it
+doesn't clutter the issues view. For subsequent notifications for that same
+user, this action will create a new comment on the existing issue.
 
-This template includes tests, linting, a validation workflow, publishing, and versioning guidance.
+## Basic usage
 
-If you are new, there's also a simpler introduction. See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-Install the dependencies
-
-```bash
-npm install
+```yaml
+- uses: lukebaker/action-notify-via-issue@v1
+  if: ${{ failure() }}
 ```
 
-Run the tests :heavy_check_mark:
-
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-...
-```
-
-## Change action.yml
-
-The action.yml contains defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-const core = require('@actions/core');
-...
-
-async function run() {
-  try {
-      ...
-  }
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Package for distribution
-
-GitHub Actions will run the entry point from the action.yml. Packaging assembles the code into one file that can be checked in to Git, enabling fast and reliable execution and preventing the need to check in node_modules.
-
-Actions are run from GitHub repos. Packaging the action will create a packaged action in the dist folder.
-
-Run prepare
-
-```bash
-npm run prepare
-```
-
-Since the packaged index.js is run from the dist folder.
-
-```bash
-git add dist
-```
-
-## Create a release branch
-
-Users shouldn't consume the action from master since that would be latest code and actions can break compatibility between major versions.
-
-Checkin to the v1 release branch
-
-```bash
-git checkout -b v1
-git commit -a -m "v1 release"
-```
-
-```bash
-git push origin v1
-```
-
-Your action is now published! :rocket:
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
+This will create an issue comment whenever the job fails. The comment / issue
+will @ mention the user whose interaction triggered the GitHub workflow to
+run.
 
 ## Usage
 
-You can now consume the action by referencing the v1 branch
-
 ```yaml
-uses: actions/javascript-action@v1
-with:
-  milliseconds: 1000
+- uses: lukebaker/action-notify-via-issue@v1
+  if: ${{ always() }}
+  with:
+    # Repository name with owner. For example, lukebaker/action-notify-via-issue
+    # Lodash template: no
+    # Default: ${{ github.repository }}
+    repository: ""
+
+    # The GitHub authentication token.
+    # Lodash template: no
+    # Default: ${{ github.token }}
+    token: ""
+
+    # The GitHub username to notify.
+    # Lodash template: no
+    # Default: ${{ github.actor }}
+    user: ""
+
+    # Notification will be skipped when this evaluates to "true"
+    # Lodash template: yes
+    # Default: "false"
+    skip_when: "false"
+
+    # The title used for the GitHub issue. Used to find existing issue to add
+    # subsequent comments to.
+    # Lodash template: yes
+    # Default: "${{ github.workflow }} notifications for ${{ github.actor }}"
+    title: ""
+
+    # Introduction body used when creating a new issue.
+    # Lodash template: yes
+    # Default: see `action.yml`
+    intro_body: ""
+
+    # Comment body used for notification.
+    # Lodash template: yes
+    # Default: see `action.yml`
+    comment_body: ""
 ```
 
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
+### Lodash template
+
+Above some values indicate "Lodash template: yes". These values are passsed
+through [Lodash `template()`](https://lodash.com/docs/4.17.15#template). This
+gives a lot of flexibility to customize these values as they have the full
+power of JavaScript. Additionally, the following context is passed to these
+templates:
+
+- [github](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context)
+- [job](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#job-context)
+- [runner](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#runner-context)
+- [matrix](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#contexts)
+
+Some examples can be found in the defaults specified in
+[action.yml](action.yml).
+
+**Note:** GitHub provides some variable replacement with things like `${{ github.repository }}` inside the workflow definition. These will be completed _before_ the Lodash template is executed.
+
+## Todo
+
+- [ ] Allow multiple users and pass through `template()`
+- [ ] Allow "ALL" users to notify all mentionable users
+- [ ] Include duration of job like [action-slack](https://github.com/8398a7/action-slack/blob/932385ec78c1a25cdbbdc3c2a9fc4d91f8534aed/src/fields.ts#L94-L100)
+- [ ] Include link to specific job that failed, using same API call above to get job id
+
+## Development
+
+- Install dependencies:
+  ```
+  yarn install
+  ```
+- Make changes
+- Run lint, tests, build:
+  ```
+  yarn all
+  ```
+- Commit and push changes
