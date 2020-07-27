@@ -23,6 +23,4 @@ jobs:
       #- name: Fail
       #  run: exit 1
       - uses: ./
-        with:
-          skip_when: ${job.status === "success"}
         if: ${{ always() }}

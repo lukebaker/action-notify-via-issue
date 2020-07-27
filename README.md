@@ -66,7 +66,7 @@ run.
 
 ### Lodash template
 
-Above some values indicate "Lodash template: yes". These values are passsed
+Above, some values indicate "Lodash template: yes". These values are passsed
 through [Lodash `template()`](https://lodash.com/docs/4.17.15#template). This
 gives a lot of flexibility to customize these values as they have the full
 power of JavaScript. Additionally, the following context is passed to these
