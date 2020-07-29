@@ -501,7 +501,7 @@ async function run() {
       strategy,
       matrix,
     };
-    core.debug(JSON.stringify(templateContext));
+    core.info(JSON.stringify(templateContext));
     const title = template(core.getInput("title"))(templateContext);
     templateContext = { ...templateContext, title };
     const skip_when = template(core.getInput("skip_when"))(templateContext);
@@ -535,6 +535,7 @@ async function run() {
       core.info(`Added comment: ${addComment.commentEdge.node.url}`);
     }
   } catch (error) {
+    core.error(error.stack);
     core.setFailed(error);
   }
 }
