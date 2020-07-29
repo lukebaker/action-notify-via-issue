@@ -535,6 +535,7 @@ async function run() {
       core.info(`Added comment: ${addComment.commentEdge.node.url}`);
     }
   } catch (error) {
+    core.error(error.stack);
     core.setFailed(error);
   }
 }
