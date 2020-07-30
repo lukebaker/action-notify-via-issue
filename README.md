@@ -10,6 +10,33 @@ to notify a particular user. It will immediately close this issue so that it
 doesn't clutter the issues view. For subsequent notifications for that same
 user, this action will create a new comment on the existing issue.
 
+In order to find the appropriate issue to add a comment to, this action will
+search for issues that mention the user receiving this notification _and_ an
+issue that has a title that matches the title for this message. In other
+words, if you're customizing the title, be sure that the title isn't always
+changing (e.g., by including the commit or date) because that will ensure
+that this action will create a new issue everytime. Issue notifications
+follow regular GitHub rules:
+1. All watchers of the repo will be notified of the issue creation.
+
+2. Anyone can unsubscribe from a particular issue.
+
+3. If you are @ mentioned on an issue, you're automatically subscribed to it
+even if you previously unsubscribed from it.
+
+## Motivation
+
+Default GitHub Action notifications aren't flexible. Other solutions involve
+secondary services (email API gateway or Slack), which aren't always needed.
+Additionally, they require a manual mapping from GitHub users to the
+appropriate email address or Slack user when notifying individual actors.
+Broadcasting to everyone via an alias or Slack channel can be a nuisance and
+/ or uneccessarily shaming.
+
+This sidesteps those issues for notifying individuals using GitHub itself and
+assuming that the user will receive an notification somehow (e.g., email)
+when they are @ mentioned on an issues.
+
 ## Basic usage
 
 ```yaml
