@@ -29,8 +29,6 @@ inputs:
       <% } %>
       @${user}
       - Workflow: [${github.workflow} results](${github.payload.repository.html_url}/actions/runs/${github.runId})
-      - Commit: [`${github.payload.after.slice(0,7)}`](${github.payload.repository.html_url}/commit/${github.payload.after})
-      ${github.payload.head_commit && github.payload.head_commit.message.replace(/^/gm, "    > ")}
       - Repository: [${github.payload.repository.full_name}](${github.payload.repository.html_url})
   skip_when:
     description: "lodash template that returns 'true' or 'false' to skip notification"
